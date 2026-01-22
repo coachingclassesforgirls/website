@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coaching Classes for Girls - Premium Online English Education</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --color-1: #FF6B6B;
+            --color-2: #4ECDC4;
+            --color-3: #45B7D1;
+            --color-4: #FFA07A;
+            --color-5: #98D8C8;
+            --color-6: #F7DC6F;
+            --color-7: #BB8FCE;
+            --color-8: #85C1E2;
+            --color-9: #F8B739;
+            --color-10: #52B788;
+            --color-11: #EF476F;
+            --color-12: #06FFA5;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #ffffff;
+            color: #1a1a1a;
+            overflow-x: hidden;
+            cursor: none;
+        }
+
+        /* Custom Pencil Cursor */
+        .custom-cursor {
+            position: fixed;
+            width: 40px;
+            height: 40px;
+            pointer-events: none;
+            z-index: 10000;
+            transition: transform 0.15s ease-out;
+        }
+
+        .cursor-pencil {
+            font-size: 40px;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+        }
+
+        /* Canvas for WebGL effects */
+        #webgl-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .content-wrapper {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,107,107,0.1) 0%, rgba(78,205,196,0.1) 100%);
+        }
+
+        .hero-title {
+            font-size: clamp(3rem, 10vw, 8rem);
+            font-weight: 900;
+            letter-spacing: -0.05em;
+            text-align: center;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--color-1), var(--color-2), var(--color-3), var(--color-4));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradient-shift 8s ease infinite;
+            background-size: 300% 300%;
+        }
+
+        @keyframes gradient-shift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.2rem, 3vw, 2rem);
+            font-weight: 300;
+            color: #555;
+            margin-bottom: 3rem;
+            opacity: 0;
+            animation: fadeInUp 1s ease 0.5s forwards;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+        }
+
+        .cta-button {
+            padding: 1.5rem 3rem;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 50px;
+            background: linear-gradient(135deg, var(--color-1), var(--color-11));
+            color: white;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(255,107,107,0.3);
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .cta-button:hover::before {
+            left: 100%;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(255,107,107,0.4);
+        }
+
+        /* Section Styling */
+        section {
+            min-height: 100vh;
+            padding: 6rem 2rem;
+            position: relative;
+        }
+
+        .section-title {
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            font-weight: 800;
+            margin-bottom: 3rem;
+            text-align: center;
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+
+        /* About Section */
+        .about-section {
+            background: linear-gradient(180deg, rgba(69,183,209,0.05) 0%, rgba(152,216,200,0.05) 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .about-content {
+            max-width: 1200px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .credential-card {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .credential-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--color-1), var(--color-2), var(--color-3), var(--color-4));
+            background-size: 300% 100%;
+            animation: gradient-move 3s ease infinite;
+        }
+
+        @keyframes gradient-move {
+            0%, 100% { background-position: 0% 0%; }
+            50% { background-position: 100% 0%; }
+        }
+
+        .credential-card:hover {
+            transform: translateY(-15px) scale(1.02);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+        }
+
+        .credential-card h3 {
+            font-size: 1.4rem;
+            color: var(--color-1);
+            margin-bottom: 1rem;
+        }
+
+        .credential-card p {
+            color: #555;
+            line-height: 1.8;
+            font-size: 1.05rem;
+        }
+
+        /* Services Section */
+        .services-section {
+            background: linear-gradient(180deg, rgba(247,220,111,0.08) 0%, rgba(187,143,206,0.08) 100%);
+        }
+
+        .services-grid {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 3rem;
+        }
+
+        .service-category {
+            background: white;
+            padding: 3rem;
+            border-radius: 30px;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.08);
+            transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .service-category::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,107,107,0.1) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .service-category:hover::after {
+            opacity: 1;
+        }
+
+        .service-category:hover {
+            transform: translateY(-20px) rotateX(5deg);
+            box-shadow: 0 25px 70px rgba(0,0,0,0.12);
+        }
+
+        .service-category:nth-child(1) { border-top: 5px solid var(--color-1); }
+        .service-category:nth-child(2) { border-top: 5px solid var(--color-2); }
+        .service-category:nth-child(3) { border-top: 5px solid var(--color-7); }
+
+        .service-category h3 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            color: #1a1a1a;
+        }
+
+        .service-item {
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            font-size: 1.1rem;
+            color: #444;
+            transition: all 0.3s ease;
+        }
+
+        .service-item:hover {
+            padding-left: 15px;
+            color: var(--color-1);
+        }
+
+        .special-offer {
+            background: linear-gradient(135deg, var(--color-9), var(--color-4));
+            color: white;
+            padding: 1rem;
+            border-radius: 15px;
+            margin: 1rem 0;
+            font-weight: 600;
+            text-align: center;
+            animation: pulse 2s ease infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .delivery-mode {
+            text-align: center;
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: linear-gradient(135deg, var(--color-10), var(--color-12));
+            border-radius: 20px;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        /* Comparison Section */
+        .comparison-section {
+            background: linear-gradient(180deg, rgba(255,107,107,0.05) 0%, rgba(6,255,165,0.05) 100%);
+        }
+
+        .comparison-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 20px;
+            margin-top: 3rem;
+        }
+
+        .comparison-table th {
+            font-size: 2rem;
+            padding: 2rem;
+            text-align: center;
+            font-weight: 800;
+        }
+
+        .comparison-table th:first-child {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+            color: white;
+            border-radius: 20px 0 0 0;
+        }
+
+        .comparison-table th:last-child {
+            background: linear-gradient(135deg, #06ffa5, #00d084);
+            color: white;
+            border-radius: 0 20px 0 0;
+        }
+
+        .comparison-table td {
+            padding: 2rem;
+            font-size: 1.2rem;
+            text-align: center;
+            background: white;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            transition: all 0.4s ease;
+        }
+
+        .comparison-table td:first-child {
+            border-left: 5px solid #ff6b6b;
+            color: #555;
+        }
+
+        .comparison-table td:last-child {
+            border-left: 5px solid #06ffa5;
+            color: #1a1a1a;
+            font-weight: 600;
+        }
+
+        .comparison-table tr:hover td {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        /* Contact Section */
+        .contact-section {
+            background: linear-gradient(135deg, rgba(78,205,196,0.1) 0%, rgba(255,107,107,0.1) 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .contact-container {
+            max-width: 800px;
+            text-align: center;
+        }
+
+        .whatsapp-card {
+            background: white;
+            padding: 4rem;
+            border-radius: 40px;
+            box-shadow: 0 20px 80px rgba(0,0,0,0.15);
+            margin: 3rem 0;
+            transition: all 0.5s ease;
+        }
+
+        .whatsapp-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 30px 100px rgba(0,0,0,0.2);
+        }
+
+        .whatsapp-icon {
+            font-size: 4rem;
+            margin-bottom: 2rem;
+        }
+
+        .whatsapp-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: #25D366;
+        }
+
+        .whatsapp-link {
+            display: inline-block;
+            padding: 1.5rem 3rem;
+            background: linear-gradient(135deg, #25D366, #128C7E);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 1.3rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(37,211,102,0.3);
+        }
+
+        .whatsapp-link:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(37,211,102,0.4);
+        }
+
+        /* Scroll Indicator */
+        .scroll-indicator {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 30px;
+            height: 50px;
+            border: 2px solid var(--color-1);
+            border-radius: 20px;
+            z-index: 100;
+            animation: scroll-bounce 2s ease infinite;
+        }
+
+        .scroll-indicator::before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 6px;
+            height: 6px;
+            background: var(--color-1);
+            border-radius: 50%;
+            animation: scroll-move 2s ease infinite;
+        }
+
+        @keyframes scroll-bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(10px); }
+        }
+
+        @keyframes scroll-move {
+            0% { top: 10px; opacity: 1; }
+            100% { top: 30px; opacity: 0; }
+        }
+
+        /* Parallax Elements */
+        .floating-shape {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.6;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+
+        .shape-1 {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, var(--color-1), var(--color-2));
+            top: 10%;
+            left: 5%;
+            animation-delay: 0s;
+        }
+
+        .shape-2 {
+            width: 150px;
+            height: 150px;
+            background: linear-gradient(135deg, var(--color-3), var(--color-4));
+            top: 60%;
+            right: 10%;
+            animation-delay: 1s;
+        }
+
+        .shape-3 {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--color-7), var(--color-8));
+            bottom: 20%;
+            left: 15%;
+            animation-delay: 2s;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 3rem;
+            }
+
+            .services-grid,
+            .about-content {
+                grid-template-columns: 1fr;
+            }
+
+            .comparison-table {
+                font-size: 0.9rem;
+            }
+
+            .comparison-table th,
+            .comparison-table td {
+                padding: 1rem;
+            }
+        }
+
+        /* Chromatic Aberration Effect */
+        .chromatic-text {
+            position: relative;
+            display: inline-block;
+        }
+
+        .chromatic-text::before,
+        .chromatic-text::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0.8;
+        }
+
+        .chromatic-text::before {
+            color: var(--color-1);
+            animation: glitch-1 2.5s infinite;
+        }
+
+        .chromatic-text::after {
+            color: var(--color-2);
+            animation: glitch-2 2.5s infinite;
+        }
+
+        @keyframes glitch-1 {
+            0%, 100% { transform: translate(0); }
+            33% { transform: translate(-2px, 2px); }
+            66% { transform: translate(2px, -2px); }
+        }
+
+        @keyframes glitch-2 {
+            0%, 100% { transform: translate(0); }
+            33% { transform: translate(2px, 2px); }
+            66% { transform: translate(-2px, -2px); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Custom Pencil Cursor -->
+    <div class="custom-cursor">
+        <span class="cursor-pencil">✏️</span>
+    </div>
+
+    <!-- WebGL Canvas for Background Effects -->
+    <canvas id="webgl-canvas"></canvas>
+
+    <!-- Content Wrapper -->
+    <div class="content-wrapper">
+
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="floating-shape shape-1"></div>
+            <div class="floating-shape shape-2"></div>
+            <div class="floating-shape shape-3"></div>
+
+            <h1 class="hero-title chromatic-text" data-text="Coaching Classes for Girls">
+                Coaching Classes for Girls
+            </h1>
+            <p class="hero-subtitle">Online Excellence in English Education</p>
+            <button class="cta-button" onclick="document.querySelector('.contact-section').scrollIntoView({behavior: 'smooth'})">
+                Join Our Community
+            </button>
+
+            <div class="scroll-indicator"></div>
+        </section>
+
+        <!-- About Section -->
+        <section class="about-section">
+            <h2 class="section-title">Distinguished Excellence</h2>
+
+            <div class="about-content">
+                <div class="credential-card">
+                    <h3>🎓 Academic Excellence</h3>
+                    <p><strong>Master of Arts in English</strong> - First Class Honours, 3rd Position from Patna University (Ranked #181 in India)</p>
+                    <p style="margin-top: 1rem;"><strong>Bachelor of Arts (Honours) in English</strong></p>
+                </div>
+
+                <div class="credential-card">
+                    <h3>🌍 International Certifications</h3>
+                    <p><strong>TESOL Certified Professional</strong> from Arizona State University (Ranked #36 US, #173 Globally)</p>
+                    <p style="margin-top: 1rem;"><strong>Creative Writing: The Craft of Plot</strong> from Wesleyan University</p>
+                </div>
+
+                <div class="credential-card">
+                    <h3>👩‍🏫 Professional Experience</h3>
+                    <p><strong>Former Lecturer</strong> at Umm Al-Qura University English Language Centre (Ranked #3 in Saudi Arabia, #19 Arab Region, #622 Globally)</p>
+                    <p style="margin-top: 1rem;"><strong>English Language Teacher</strong> at Najam High School, Patna</p>
+                </div>
+
+                <div class="credential-card">
+                    <h3>📚 Specialized Expertise</h3>
+                    <p>Taught English for General Purposes (A1 to B1 CEFR levels) and English for Specific Purposes</p>
+                    <p style="margin-top: 1rem;"><strong>Current Research:</strong> Doctoral study on "Image of India in the Works of Aravind Adiga"</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Section -->
+        <section class="services-section">
+            <h2 class="section-title">Our Programs</h2>
+
+            <div class="services-grid">
+                <div class="service-category">
+                    <h3>📖 For School Students</h3>
+                    <div class="service-item">✨ Class 4 to Class 10: All Subjects</div>
+                    <div class="special-offer">⚡ Special: Class 10 Syllabus Completion in 1 Month Only</div>
+                    <div class="service-item">✨ Class 11 & Class 12: English Subject</div>
+                    <div class="special-offer">⚡ Special: Class 12 Syllabus Completion in 1 Month Only</div>
+                </div>
+
+                <div class="service-category">
+                    <h3>🎓 For College & University Students</h3>
+                    <div class="service-item">📚 B.A. in English Literature</div>
+                    <div class="service-item">📖 M.A. in English Literature</div>
+                </div>
+
+                <div class="service-category">
+                    <h3>🏠 For Homemakers</h3>
+                    <div class="service-item">💬 Speaking and Communication in English Language for General and Specific Purposes</div>
+                </div>
+            </div>
+
+            <div class="delivery-mode">💻 Mode of Delivery: Online Classes</div>
+        </section>
+
+        <!-- Comparison Section -->
+        <section class="comparison-section">
+            <h2 class="section-title">WHY CHOOSE ONLINE?</h2>
+
+            <div class="comparison-container">
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Offline ❌</th>
+                            <th>Online ✅</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Limited to Local Tutors 🔒</td>
+                            <td>Access to Top Professors (not available locally) 🎓</td>
+                        </tr>
+                        <tr>
+                            <td>Wasting Time In Travel and Traffic 🚗</td>
+                            <td>No Time Pass Rather Extra Revision Time ⏰</td>
+                        </tr>
+                        <tr>
+                            <td>Drained & Sweaty 🥵</td>
+                            <td>Fresh & Focused ⚡</td>
+                        </tr>
+                        <tr>
+                            <td>Heavy Bags & Fatigue 🎒</td>
+                            <td>Comfortable Study Space 🪑</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section class="contact-section">
+            <h2 class="section-title">Join Our Community</h2>
+
+            <div class="contact-container">
+                <div class="whatsapp-card">
+                    <div class="whatsapp-icon">💚</div>
+                    <h3 class="whatsapp-title">Join Our WhatsApp Community</h3>
+                    <p style="font-size: 1.2rem; margin-bottom: 2rem; color: #555;">
+                        Connect with us for personalized guidance, updates, and exclusive learning resources
+                    </p>
+                    <a href="https://chat.whatsapp.com/B8rVt5qrKYxIRhAAF61N1v" target="_blank" class="whatsapp-link">
+                        Join Now on WhatsApp
+                    </a>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        // Custom Cursor Movement
+        const cursor = document.querySelector('.custom-cursor');
+        let mouseX = 0, mouseY = 0;
+        let cursorX = 0, cursorY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        function animateCursor() {
+            cursorX += (mouseX - cursorX) * 0.2;
+            cursorY += (mouseY - cursorY) * 0.2;
+            cursor.style.transform = `translate(${cursorX}px, ${cursorY}px)`;
+            requestAnimationFrame(animateCursor);
+        }
+        animateCursor();
+
+        // WebGL Three.js Background
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ 
+            canvas: document.getElementById('webgl-canvas'),
+            alpha: true,
+            antialias: true
+        });
+
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        camera.position.z = 5;
+
+        // Create Particle System
+        const particlesGeometry = new THREE.BufferGeometry();
+        const particlesCount = 1000;
+        const posArray = new Float32Array(particlesCount * 3);
+        const colorArray = new Float32Array(particlesCount * 3);
+
+        const colors = [
+            [1, 0.42, 0.42],    // color-1
+            [0.31, 0.8, 0.77],  // color-2
+            [0.27, 0.72, 0.82], // color-3
+            [1, 0.63, 0.48],    // color-4
+            [0.6, 0.85, 0.78],  // color-5
+            [0.97, 0.86, 0.44], // color-6
+        ];
+
+        for(let i = 0; i < particlesCount * 3; i += 3) {
+            posArray[i] = (Math.random() - 0.5) * 10;
+            posArray[i + 1] = (Math.random() - 0.5) * 10;
+            posArray[i + 2] = (Math.random() - 0.5) * 10;
+
+            const colorIndex = Math.floor(Math.random() * colors.length);
+            colorArray[i] = colors[colorIndex][0];
+            colorArray[i + 1] = colors[colorIndex][1];
+            colorArray[i + 2] = colors[colorIndex][2];
+        }
+
+        particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+        particlesGeometry.setAttribute('color', new THREE.BufferAttribute(colorArray, 3));
+
+        const particlesMaterial = new THREE.PointsMaterial({
+            size: 0.05,
+            vertexColors: true,
+            transparent: true,
+            opacity: 0.8,
+            blending: THREE.AdditiveBlending
+        });
+
+        const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+        scene.add(particlesMesh);
+
+        // Mouse Movement Effect
+        let mouseXGL = 0, mouseYGL = 0;
+        document.addEventListener('mousemove', (event) => {
+            mouseXGL = (event.clientX / window.innerWidth) * 2 - 1;
+            mouseYGL = -(event.clientY / window.innerHeight) * 2 + 1;
+        });
+
+        // Animation Loop
+        function animate() {
+            requestAnimationFrame(animate);
+
+            particlesMesh.rotation.x += 0.0005;
+            particlesMesh.rotation.y += 0.0005;
+
+            // Mouse interaction
+            particlesMesh.rotation.x += mouseYGL * 0.0005;
+            particlesMesh.rotation.y += mouseXGL * 0.0005;
+
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        // Scroll Effects
+        window.addEventListener('scroll', () => {
+            const scrollPercent = window.scrollY / (document.documentElement.scrollHeight - window.innerHeight);
+            particlesMesh.rotation.z = scrollPercent * Math.PI * 2;
+
+            // Hide scroll indicator
+            const scrollIndicator = document.querySelector('.scroll-indicator');
+            if(window.scrollY > 100) {
+                scrollIndicator.style.opacity = '0';
+            } else {
+                scrollIndicator.style.opacity = '1';
+            }
+        });
+
+        // Responsive
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // Intersection Observer for Scroll Animations
+        const observerOptions = {
+            threshold: 0.2,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe all cards and sections
+        document.querySelectorAll('.credential-card, .service-category').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(50px)';
+            el.style.transition = 'all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+            observer.observe(el);
+        });
+
+        // Parallax Effect for Floating Shapes
+        window.addEventListener('scroll', () => {
+            const shapes = document.querySelectorAll('.floating-shape');
+            shapes.forEach((shape, index) => {
+                const speed = (index + 1) * 0.5;
+                const yPos = -(window.scrollY * speed);
+                shape.style.transform = `translateY(${yPos}px)`;
+            });
+        });
+
+        // Smooth Scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if(target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
